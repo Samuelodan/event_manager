@@ -1,12 +1,16 @@
 # frozen_string_literal: false
 
 require 'csv'
+require 'google/apis/civicinfo_v2'
 
 puts 'Event Manager Initialized'
 
 def clean_zipcode(zip)
   zip.to_s.rjust(5, '0')[0...5]
 end
+
+civic_info = Google::Apis::CivicinfoV2::CivicInfoService.new
+civic_info.key = 'AIzaSyClRzDqDh5MsXwnCWi0kOiiBivP6JsSyBw'
 
 contents = CSV.open(
   'event_attendees.csv',
@@ -16,7 +20,14 @@ contents = CSV.open(
 
 contents.each do |row|
   name = row[:first_name]
-  zip = row[:zipcode]
+  zip = clean_zipcode(row[:zipcode])
 
-  puts "#{name}\t#{clean_zipcode(zip)}"
+  legislators = civic_info.representative_info_by_address(
+    address: zip,
+    levels: 'country',
+    roles: ['legislatorUpperBody', 'legislatorLowerBody']
+  )
+  legislators = legislators
+
+  puts "#{name}\t#{zip}\t#{legislators}"
 end
