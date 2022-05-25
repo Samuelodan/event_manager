@@ -18,7 +18,6 @@ contents = CSV.open(
   header_converters: :symbol
 )
 
-
 contents.each do |row|
   name = row[:first_name]
   zip = clean_zipcode(row[:zipcode])
@@ -29,7 +28,7 @@ contents.each do |row|
       levels: 'country',
       roles: ['legislatorUpperBody', 'legislatorLowerBody']
     )
-    legislators = legislators.officials
+    legislators = legislators.officials.map(&:name)
   rescue
     'You can find your representatives by visiting www.commoncause.org/take-action/find-elected-officials'
   end
