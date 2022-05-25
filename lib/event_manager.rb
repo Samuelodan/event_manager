@@ -4,6 +4,18 @@ require 'csv'
 
 puts 'Event Manager Initialized'
 
+def clean_zipcode(zip)
+  if zip.nil?
+    '00000'
+  elsif zip.length < 5
+    zip.rjust(5, '0')
+  elsif zip.length > 5
+    zip[0...5]
+  else
+    zip
+  end
+end
+
 contents = CSV.open(
   'event_attendees.csv',
   headers: true,
@@ -14,13 +26,5 @@ contents.each do |row|
   name = row[:first_name]
   zip = row[:zipcode]
 
-  if zip.nil?
-    zip = '00000'
-  elsif zip.length < 5
-    zip = zip.rjust(5, '0')
-  elsif zip.length > 5
-    zip = zip[0...5]
-  end
-
-  puts "#{name}\t#{zip}"
+  puts "#{name}\t#{clean_zipcode(zip)}"
 end
