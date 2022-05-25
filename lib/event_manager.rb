@@ -18,16 +18,20 @@ contents = CSV.open(
   header_converters: :symbol
 )
 
+
 contents.each do |row|
   name = row[:first_name]
   zip = clean_zipcode(row[:zipcode])
 
-  legislators = civic_info.representative_info_by_address(
-    address: zip,
-    levels: 'country',
-    roles: ['legislatorUpperBody', 'legislatorLowerBody']
-  )
-  legislators = legislators
-
+  begin
+    legislators = civic_info.representative_info_by_address(
+      address: zip,
+      levels: 'country',
+      roles: ['legislatorUpperBody', 'legislatorLowerBody']
+    )
+    legislators = legislators.officials
+  rescue
+    'You can find your representatives by visiting www.commoncause.org/take-action/find-elected-officials'
+  end
   puts "#{name}\t#{zip}\t#{legislators}"
 end
