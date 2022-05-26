@@ -37,10 +37,12 @@ contents.each do |row|
   name = row[:first_name]
   zip = clean_zipcode(row[:zipcode])
   legislators = legislators_by_zip(zip)
-
-  personal_letter = template_letter.gsub('FIRST_NAME', name)
-  personal_letter.gsub!('LEGISLATORS', legislators)
-
+  begin
+    personal_letter = template_letter.gsub('FIRST_NAME', name)
+    personal_letter.gsub!('LEGISLATORS', legislators)
+  rescue
+    'no legislators found'
+  end
   puts personal_letter
 
   # puts "#{name}\t#{zip}\t#{legislators}"
