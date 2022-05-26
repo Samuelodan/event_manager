@@ -14,16 +14,14 @@ def legislators_by_zip(zip)
   civic_info = Google::Apis::CivicinfoV2::CivicInfoService.new
   civic_info.key = 'AIzaSyClRzDqDh5MsXwnCWi0kOiiBivP6JsSyBw'
   begin
-    legislators = civic_info.representative_info_by_address(
+    civic_info.representative_info_by_address(
       address: zip,
       levels: 'country',
       roles: ['legislatorUpperBody', 'legislatorLowerBody']
-    )
-    legislators = legislators.officials.map(&:name).join(', ')
+    ).officials
   rescue
     'You can find your representatives by visiting www.commoncause.org/take-action/find-elected-officials'
   end
-  legislators
 end
 
 template_letter = File.read('form_letter.erb')
