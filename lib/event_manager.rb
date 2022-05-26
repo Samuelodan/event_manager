@@ -34,9 +34,12 @@ contents = CSV.open(
 )
 
 contents.each do |row|
+  id = row[0]
   name = row[:first_name]
   zip = clean_zipcode(row[:zipcode])
   legislators = legislators_by_zip(zip)
+
+  Dir.mkdir('output') unless Dir.exist?('output')
 
   puts "#{name}\t#{zip}"
   puts erb_template.result(binding)
