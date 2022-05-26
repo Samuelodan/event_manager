@@ -2,6 +2,7 @@
 
 require 'csv'
 require 'google/apis/civicinfo_v2'
+require 'erb'
 
 puts 'Event Manager Initialized'
 
@@ -25,7 +26,8 @@ def legislators_by_zip(zip)
   legislators
 end
 
-template_letter = File.read('form_letter.html')
+template_letter = File.read('form_letter.erb')
+erb_template = ERB.new template_letter
 
 contents = CSV.open(
   'event_attendees.csv',
