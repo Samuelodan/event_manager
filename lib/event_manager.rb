@@ -26,6 +26,7 @@ end
 
 template_letter = File.read('form_letter.erb')
 erb_template = ERB.new template_letter
+form_letter = erb_template.result(binding)
 
 contents = CSV.open(
   'event_attendees.csv',
@@ -41,6 +42,11 @@ contents.each do |row|
 
   Dir.mkdir('output') unless Dir.exist?('output')
 
+  filename = "output/thanks_#{id}.html"
+
+  File.open(filename, 'w') do |file|
+    file.puts form_letter
+  end
+
   puts "#{name}\t#{zip}"
-  puts erb_template.result(binding)
 end
