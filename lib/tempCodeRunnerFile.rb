@@ -1,0 +1,1 @@
+  puts erb_template.result(binding)
