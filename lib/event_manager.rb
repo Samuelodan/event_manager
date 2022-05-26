@@ -33,6 +33,13 @@ def save_thanks_letter(id, form_letter)
   end
 end
 
+def clean_phone_number(phone)
+  number = phone.gsub(/\D/, '')
+  return number if number.length == 10
+  return number.delete_prefix!('1') if number.length == 11 && number.start_with?('1')
+  return 'bad number' if number.length.between?(0, 20)
+end
+
 template_letter = File.read('form_letter.erb')
 erb_template = ERB.new template_letter
 
@@ -46,6 +53,8 @@ contents.each do |row|
   id = row[0]
   name = row[:first_name]
   zip = clean_zipcode(row[:zipcode])
+  phone = row[:homephone]
+
   legislators = legislators_by_zip(zip)
 
   form_letter = erb_template.result(binding)
