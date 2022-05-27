@@ -40,6 +40,14 @@ def clean_phone_number(phone)
   return 'bad number' if number.length.between?(0, 20)
 end
 
+def create_time(reg)
+  date = reg.split(' ')[0].split('/')
+  date[2] = date[2].rjust(4, '20')
+  date = date.map(&:to_i)
+  time = reg.split(' ')[-1].split(':').map(&:to_i)
+  Time.new(date[2], date[0], date[1], time[0], time[1])
+end
+
 template_letter = File.read('form_letter.erb')
 erb_template = ERB.new template_letter
 
@@ -54,11 +62,12 @@ contents.each do |row|
   name = row[:first_name]
   zip = clean_zipcode(row[:zipcode])
   phone = row[:homephone]
+  date = row[:regdate]
 
   legislators = legislators_by_zip(zip)
 
   form_letter = erb_template.result(binding)
   save_thanks_letter(id, form_letter)
 
-  puts "#{name}\t#{zip}"
+  puts "#{name}\t#{zip}\t#{date}"
 end
