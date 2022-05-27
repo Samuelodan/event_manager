@@ -62,7 +62,6 @@ contents.each do |row|
   name = row[:first_name]
   zip = clean_zipcode(row[:zipcode])
   phone = row[:homephone]
-  date = row[:regdate]
 
   legislators = legislators_by_zip(zip)
 
