@@ -81,3 +81,13 @@ def get_best_hour(csv_content)
   hours_hash = hours.each_with_object(Hash.new(0)) { |hr, hsh| hsh[hr] += 1 }
   puts "#{hours_hash.key(hours_hash.values.max)}:00 is the best hour"
 end
+
+def get_best_day(csv_content)
+  days = []
+  csv_content.each do |row|
+    day = create_time(row[:regdate]).strftime('%A')
+    days << day
+  end
+  days_hash = days.each_with_object(Hash.new(0)) { |d, hsh| hsh[d] += 1 }
+  puts "#{days_hash.key(days_hash.values.max)} is the best day"
+end
