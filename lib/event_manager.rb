@@ -71,3 +71,16 @@ contents.each do |row|
 
   puts "#{name}\t#{zip}\t#{date}"
 end
+
+def get_best_hour(csv_content)
+  hours = []
+  csv_content.each do |row|
+    hour = create_time(row[:regdate]).hour
+    hours << hour
+  end
+  hours_hash = hours.reduce(Hash.new(0)) do |hsh, hr|
+    hsh[hr] += 1
+    hsh
+  end
+  puts "#{hours_hash.key(hours_hash.values.max)}:00 is the best hour"
+end
