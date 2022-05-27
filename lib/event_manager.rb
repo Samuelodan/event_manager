@@ -78,9 +78,6 @@ def get_best_hour(csv_content)
     hour = create_time(row[:regdate]).hour
     hours << hour
   end
-  hours_hash = hours.reduce(Hash.new(0)) do |hsh, hr|
-    hsh[hr] += 1
-    hsh
-  end
+  hours_hash = hours.each_with_object(Hash.new(0)) { |hr, hsh| hsh[hr] += 1 }
   puts "#{hours_hash.key(hours_hash.values.max)}:00 is the best hour"
 end
