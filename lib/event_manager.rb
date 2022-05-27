@@ -10,6 +10,7 @@ def clean_zipcode(zip)
   zip.to_s.rjust(5, '0')[0...5]
 end
 
+# fetches and returns raw info about officials based on zipcode
 def legislators_by_zip(zip)
   civic_info = Google::Apis::CivicinfoV2::CivicInfoService.new
   civic_info.key = 'AIzaSyClRzDqDh5MsXwnCWi0kOiiBivP6JsSyBw'
@@ -24,6 +25,7 @@ def legislators_by_zip(zip)
   end
 end
 
+# saves personalized letters in unique files
 def save_thanks_letter(id, form_letter)
   Dir.mkdir('output') unless Dir.exist?('output')
   filename = "output/thanks_#{id}.html"
@@ -33,6 +35,7 @@ def save_thanks_letter(id, form_letter)
   end
 end
 
+# returns good phone numbers and identifies bad ones
 def clean_phone_number(phone)
   number = phone.gsub(/\D/, '')
   return number if number.length == 10
@@ -40,6 +43,7 @@ def clean_phone_number(phone)
   return 'bad number' if number.length.between?(0, 20)
 end
 
+# creates a time object based on date string from csv file
 def create_time(reg)
   date = reg.split(' ')[0].split('/')
   date[2] = date[2].rjust(4, '20')
@@ -71,6 +75,7 @@ contents.each do |row|
   puts "#{name}\t#{zip}\t#{date}"
 end
 
+# finds and displays the best hour based on number of registrations
 def get_best_hour(csv_content)
   hours = []
   csv_content.each do |row|
@@ -81,6 +86,7 @@ def get_best_hour(csv_content)
   puts "#{hours_hash.key(hours_hash.values.max)}:00 is the best hour"
 end
 
+# finds and displays the best day based on number of registrations
 def get_best_day(csv_content)
   days = []
   csv_content.each do |row|
